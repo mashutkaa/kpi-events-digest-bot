@@ -7,4 +7,7 @@ export const startVercel = async (req: VercelRequest, res: VercelResponse) => {
     await production(req, res, telegramBot);
 };
 
-ENVIRONMENT !== "production" && development(telegramBot);
+// Запуск в режимі розробки
+if (ENVIRONMENT !== "production") {
+    development(telegramBot).catch(console.error);
+}
