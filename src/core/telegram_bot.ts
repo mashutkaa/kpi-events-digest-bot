@@ -83,6 +83,14 @@ telegramBot.command("start", startCommandReply());
 telegramBot.command("help", helpCommandReply());
 telegramBot.command("generate", createDigestCommandReply(telegramBot));
 
+// Reply keyboard buttons (text) handlers
+telegramBot.hears(
+    "Згенерувати дайджест",
+    createDigestCommandReply(telegramBot)
+);
+telegramBot.hears("Допомога", helpCommandReply());
+telegramBot.hears("Старт", startCommandReply());
+
 // Обробляємо переслані дописи та звичайні текстові повідомлення
 telegramBot.on("text", async (ctx: Context) => {
     if (ctx?.chat?.type === "private") {

@@ -1,5 +1,6 @@
 import createDebug from "debug";
 import { Groq } from "groq-sdk";
+import { Markup } from "telegraf";
 import type { Context, Telegraf } from "telegraf";
 import { getUserEvents, clearUserEvents } from "../core/telegram_bot";
 
@@ -42,7 +43,6 @@ export const createDigestCommandReply =
 
 ВАЖЛИВО: Використовуй ТІЛЬКИ ЦІ HTML теги:
 - <b>жирний текст</b> для назв подій
-- <i>курсив</i> для виділення
 - <a href="URL">текст посилання</a> для гіперпосилань
 - НЕ використовуй <br>, <p>, <div> - замість них використовуй звичайні переноси рядків
 
@@ -103,6 +103,12 @@ ${eventsText}`,
             // Очищуємо дописи після генерування
             clearUserEvents(userId);
             await ctx.reply("Дайджест згенерований.");
+            await ctx.reply(
+                "Оберіть дію:",
+                Markup.keyboard([["Згенерувати дайджест"], ["Допомога"]])
+                    .resize()
+                    .persistent()
+            );
 
             debug("Digest generated successfully");
         } catch (error: unknown) {

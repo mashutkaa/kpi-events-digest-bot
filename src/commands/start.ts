@@ -1,10 +1,17 @@
-import createDebug from 'debug';
-import { startMessage } from '../utils';
-import type { Context } from 'telegraf';
+import createDebug from "debug";
+import { startMessage } from "../utils";
+import { Markup } from "telegraf";
+import type { Context } from "telegraf";
 
-const debug = createDebug('bot:start');
+const debug = createDebug("bot:start");
 
 export const startCommandReply = () => async (ctx: Context) => {
-  debug('Triggered "start" command');
-  ctx.reply(startMessage);
+    debug('Triggered "start" command');
+    await ctx.reply(startMessage);
+    await ctx.reply(
+        "Оберіть дію:",
+        Markup.keyboard([["Згенерувати дайджест"], ["Допомога"]])
+            .resize()
+            .persistent()
+    );
 };
