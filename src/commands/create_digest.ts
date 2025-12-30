@@ -102,9 +102,8 @@ ${eventsText}`,
 
             // Очищуємо дописи після генерування
             clearUserEvents(userId);
-            await ctx.reply("Дайджест згенерований.");
             await ctx.reply(
-                "Оберіть дію:",
+                "Дайджест згенерований.",
                 Markup.keyboard([["Згенерувати дайджест"], ["Допомога"]])
                     .resize()
                     .persistent()

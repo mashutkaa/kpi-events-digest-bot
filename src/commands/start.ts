@@ -7,9 +7,8 @@ const debug = createDebug("bot:start");
 
 export const startCommandReply = () => async (ctx: Context) => {
     debug('Triggered "start" command');
-    await ctx.reply(startMessage);
     await ctx.reply(
-        "Оберіть дію:",
+        startMessage,
         Markup.keyboard([["Згенерувати дайджест"], ["Допомога"]])
             .resize()
             .persistent()

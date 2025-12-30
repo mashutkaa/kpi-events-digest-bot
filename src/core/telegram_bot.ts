@@ -89,7 +89,6 @@ telegramBot.hears(
     createDigestCommandReply(telegramBot)
 );
 telegramBot.hears("Допомога", helpCommandReply());
-telegramBot.hears("Старт", startCommandReply());
 
 // Обробляємо переслані дописи та звичайні текстові повідомлення
 telegramBot.on("text", async (ctx: Context) => {

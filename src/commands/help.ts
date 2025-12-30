@@ -7,11 +7,10 @@ const debug = createDebug("bot:help");
 
 export const helpCommandReply = () => async (ctx: Context) => {
     debug('Triggered "help" command');
-    await ctx.reply(helpMessage, { parse_mode: "HTML" });
-    await ctx.reply(
-        "Оберіть дію:",
-        Markup.keyboard([["Згенерувати дайджест"], ["Старт"]])
+    await ctx.reply(helpMessage, {
+        parse_mode: "HTML",
+        ...Markup.keyboard([["Згенерувати дайджест"], ["Допомога"]])
             .resize()
-            .persistent()
-    );
+            .persistent(),
+    });
 };
