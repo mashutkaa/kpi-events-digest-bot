@@ -12,6 +12,18 @@ const telegramBot = new Telegraf(BOT_TOKEN);
 // Зберігання дописів у пам'яті
 const userEvents = new Map<number, Event[]>();
 
+const buildForwardSourceUrl = (message: any): string | undefined => {
+    const forwardFromChat =
+        message?.forward_from_chat ?? message?.forward_origin?.chat;
+    const forwardMessageId =
+        message?.forward_from_message_id ?? message?.forward_origin?.message_id;
+
+    if (!forwardFromChat || !forwardMessageId) return undefined;
+
+    const username = forwardFromChat?.username || "kpi_events";
+    return `https://t.me/${username}/${forwardMessageId}`;
+};
+
 // Конвертація entities у HTML
 const entitiesToHTML = (text: string, entities: any[]): string => {
     if (!entities || entities.length === 0) return text;
@@ -65,7 +77,7 @@ export const clearUserEvents = (userId: number): void => {
 };
 
 // Додавання допису
-export const addEvent = (userId: number, text: string): void => {
+export const addEvent = (userId: number, text: string, sourceUrl?: string): void => {
     if (!userEvents.has(userId)) {
         userEvents.set(userId, []);
     }
@@ -76,6 +88,7 @@ export const addEvent = (userId: number, text: string): void => {
         text,
         userId,
         timestamp: Date.now(),
+        sourceUrl,
     });
 };
 
@@ -100,11 +113,13 @@ telegramBot.on("text", async (ctx: Context) => {
         const text = message?.text || "";
         const entities = message?.entities || [];
 
+        const sourceUrl = buildForwardSourceUrl(message);
+
         // Конвертуємо entities у HTML для збереження посилань
         const eventText = entitiesToHTML(text, entities);
 
         if (eventText.trim()) {
-            addEvent(userId, eventText);
+            addEvent(userId, eventText, sourceUrl);
         }
     }
 });
@@ -117,6 +132,8 @@ telegramBot.on("message", async (ctx: Context) => {
 
         const message = ctx.message as any;
 
+        const sourceUrl = buildForwardSourceUrl(message);
+
         if (message?.forward_from_chat && message?.caption) {
             const caption = message.caption || "";
             const captionEntities = message?.caption_entities || [];
@@ -125,7 +142,7 @@ telegramBot.on("message", async (ctx: Context) => {
             const eventText = entitiesToHTML(caption, captionEntities);
 
             if (eventText.trim()) {
-                addEvent(userId, eventText);
+                addEvent(userId, eventText, sourceUrl);
             }
         }
     }

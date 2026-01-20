@@ -3,4 +3,5 @@ export interface Event {
     text: string;
     userId: number;
     timestamp: number;
+    sourceUrl?: string;
 }
